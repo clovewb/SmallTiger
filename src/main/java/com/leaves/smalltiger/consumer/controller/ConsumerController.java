@@ -68,7 +68,7 @@ public class ConsumerController {
      * @return
      */
     @RequestMapping(value = "/avatar", method = RequestMethod.PUT)
-    public MsgResult updateAvatar(@RequestParam("conId") int conId, @RequestParam("file") MultipartFile file) {
+    public MsgResult updateAvatar(@RequestParam("conId") int conId, @RequestParam MultipartFile file) {
         log.info("修改头像："+conId+"====="+file);
         MsgResult result = consumerService.updateAvatar(conId, file);
         return result;
@@ -214,7 +214,7 @@ public class ConsumerController {
      * 每月自动清除当前用户的预算
      */
     @RequestMapping(value = "/autoclear",method = RequestMethod.DELETE)
-    public MsgResult autoClear(@RequestParam int conId){
+    public MsgResult autoClear(@RequestParam("conId") int conId){
         MsgResult msgResult = consumerService.autoClear(conId);
         return msgResult;
     }
@@ -228,7 +228,7 @@ public class ConsumerController {
      * @return
      */
     @RequestMapping(value = "/deletecon",method = RequestMethod.PUT)
-    public MsgResult deleteConsumer(int conId){
+    public MsgResult deleteConsumer(@RequestParam("conId") int conId){
         log.info("传来的id："+conId);
         MsgResult msgResult = consumerService.deleteConsumer(conId);
         return msgResult;
@@ -240,8 +240,8 @@ public class ConsumerController {
      * @return
      */
     @RequestMapping(value = "/deletecons",method = RequestMethod.PUT)
-    public MsgResult deleteConsumers(int[] conIds){
-        log.info("Id数组:"+conIds);
+    public MsgResult deleteConsumers(@RequestParam("conIds") int[] conIds){
+        log.info("Id数组:"+conIds.length);
         MsgResult msgResult = consumerService.deleteConsumers(conIds);
         return msgResult;
     }
@@ -252,7 +252,7 @@ public class ConsumerController {
      * @return
      */
     @RequestMapping(value = "/statuschange",method = RequestMethod.PUT)
-    public MsgResult statuschange(int conId){
+    public MsgResult statuschange(@RequestParam("conId") int conId){
         log.info(conId+"传来的参数");
         MsgResult msgResult = consumerService.changeStatus(conId);
         return msgResult;
