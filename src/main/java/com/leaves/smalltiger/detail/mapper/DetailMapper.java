@@ -22,7 +22,7 @@ public interface DetailMapper extends BaseMapper<Detail> {
      * @return
      */
     @Select("SELECT MONTH (DETTIME) AS modernMonth, SUM(CASE WHEN DETSORT=1 THEN DETAMOUNT ELSE NULL END) AS monthTotalIncome, " +
-            "SUM( CASE WHEN DETSORT=2 THEN  DETAMOUNT ELSE NULL END ) AS monthTotalExpenditure FROM DETAIL" +
+            "SUM( CASE WHEN DETSORT=2 THEN  DETAMOUNT ELSE NULL END ) AS monthTotalExpenditure FROM detail" +
             " WHERE YEAR (DETTIME) = #{DATEYEAR} AND CONID=#{CONID} AND detStatus = 1 GROUP BY MONTH (DETTIME) ")
     public List<DataResult> selectByPerMonthSums(@Param("DATEYEAR")int dateYear, @Param("CONID") int conId);
 
@@ -34,7 +34,7 @@ public interface DetailMapper extends BaseMapper<Detail> {
      * @return
      */
     @Select("SELECT MONTH (DETTIME) AS modernMonth, SUM(CASE WHEN DETSORT=1 THEN DETAMOUNT ELSE NULL END) AS monthTotalIncome, " +
-            "SUM( CASE WHEN DETSORT=2 THEN  DETAMOUNT ELSE NULL END ) AS monthTotalExpenditure FROM DETAIL" +
+            "SUM( CASE WHEN DETSORT=2 THEN  DETAMOUNT ELSE NULL END ) AS monthTotalExpenditure FROM detail" +
             " WHERE YEAR (DETTIME) = #{DATEYEAR} AND MONTH (DETTIME) = #{DATEMOUNTH} AND CONID=#{CONID}  AND detStatus = 1  GROUP BY MONTH (DETTIME) ")
     public DataResult selectByMonthSums(@Param("DATEYEAR")int dateYear, @Param("DATEMOUNTH")int dateMonth, @Param("CONID") int conId);
 

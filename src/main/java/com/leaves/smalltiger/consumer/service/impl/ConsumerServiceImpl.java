@@ -13,6 +13,7 @@ import com.leaves.smalltiger.consumer.service.ConsumerService;
 import com.leaves.smalltiger.consumer.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -135,10 +136,14 @@ public class ConsumerServiceImpl implements ConsumerService {
     public MsgResult conReg(RegConsumer regConsumer) {
         MsgResult msgResult = new MsgResult();
         Consumer consumer = new Consumer();
+//        调用RegularExpression.randomId()方法随机生成id
+        consumer.setConId(RegularExpression.randomId());
 //        调用RegularExpression.randomNickname()方法生成昵称
         consumer.setConName(RegularExpression.randomNickname());
 //        调用RegularExpression.AVATAR_PATH生成默认头像
         consumer.setConAvatar(RegularExpression.AVATAR_PATH);
+//        性别默认为0（0、未选择、1：男、2：女）
+        consumer.setConSex(0);
 //        状态默认为1
         consumer.setConStatus(1);
 
@@ -159,24 +164,36 @@ public class ConsumerServiceImpl implements ConsumerService {
 //            }
 //        }else
         if (RegularExpression.orPhone(regConsumer.getAccount())) {
-            log.info("注册手机号为："+regConsumer.getAccount());
+            log.info("注册手机号为："+regConsumer.getAccount()+"========密码："+regConsumer.getPassword());
             Consumer consumer1 = consumerMapper.selectByPhone(regConsumer.getAccount());
-            log.info("注册手机号查询的结果："+consumer1.toString());
-            if (consumer1.getConId() == null) {
-//                添加账户和密码
-                consumer1.setConTel(regConsumer.getAccount());
+            log.info(".................");
+            if (StringUtils.isEmpty(consumer1)) {
+                log.info("==========" );
+                //                添加账户和密码
+                consumer.setConTel(regConsumer.getAccount());
                 consumer.setPassword(regConsumer.getPassword());
 //                向数据库加入数据
                 int i = consumerMapper.insertSelective(consumer);
+                log.info("手机号注册结果："+i);
                 if (i > 0) {
+                    Consumer consumer2 = consumerMapper.selectByPhone(regConsumer.getAccount());
                     msgResult.setStatusCode(200);
                     msgResult.setMsg("手机号注册成功");
+                    msgResult.setData(consumer2);
                     return msgResult;
                 }
+            }else {
+                log.info("***************");
+                log.info("注册手机号查询的结果："+consumer1.toString());
+                msgResult.setStatusCode(201);
+                msgResult.setMsg("手机号已存在");
+                return msgResult;
             }
+
         }
+        log.info("手机号格式不正确");
         msgResult.setStatusCode(201);
-        msgResult.setMsg("手机号注册失败");
+        msgResult.setMsg("请输入正确的手机号");
         return msgResult;
     }
 

@@ -1,6 +1,8 @@
 package com.leaves.smalltiger;
 
 import com.leaves.smalltiger.common.po.Consumer;
+import com.leaves.smalltiger.consumer.mapper.ConsumerMapper;
+import com.leaves.smalltiger.consumer.vo.RegConsumer;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,6 +24,21 @@ public class SmalltigerApplicationTests {
 
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    private ConsumerMapper consumerMapper;
+    @Test
+    public void testConsumer() {
+        RegConsumer regConsumer = new RegConsumer();
+        regConsumer.setAccount("15596531513");
+        Consumer consumer = consumerMapper.selectByPhone(regConsumer.getAccount());
+        if (consumer != null) {
+            log.info(consumer.toString()+"********");
+        }else {
+            log.info("手机号不存在" );
+        }
+
+    }
+
     @Test
     public void redisTest() {
         Consumer consumer1 = new Consumer();

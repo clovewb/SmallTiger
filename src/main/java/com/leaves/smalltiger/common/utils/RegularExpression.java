@@ -75,4 +75,22 @@ public class RegularExpression {
         log.info(".....随机生成的昵称....." + str);
         return str;
     }
+
+    public static int randomId() {
+        StringBuilder str = new StringBuilder();
+        for (int i = 0; i < 8; i++) {
+            if (i == 0 && 8 > 1) {
+                str.append(new Random().nextInt(9) + 1);
+            }else {
+                str.append(new Random().nextInt(10));
+            }
+        }
+        log.info(".....随机生成的Id....." + str);
+        return Integer.valueOf(str.toString());
+    }
+
+//    public static void main(String[] args) {
+//        int num = getNum();
+//        log.info(num+"====");
+//    }
 }

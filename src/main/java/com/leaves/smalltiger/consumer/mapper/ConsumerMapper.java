@@ -25,7 +25,7 @@ public interface ConsumerMapper extends BaseMapper<Consumer> {
      * @param conTel
      * @return
      */
-    @Select("SELECT * FROM consumer WHERE CONTEL = #{CONTEL}  AND CONSTATUS = 1")
+    @Select("SELECT * FROM consumer WHERE CONTEL = #{CONTEL}")
     public Consumer selectByPhone(@Param("CONTEL") String conTel);
 
     /**
@@ -78,7 +78,7 @@ public interface ConsumerMapper extends BaseMapper<Consumer> {
      * @param conId
      * @return
      */
-    @Update("UPDATE consumer SET conStatus= 0 WHERE conId=#{conId}" )
+    @Update("UPDATE consumer SET conStatus= 2 WHERE conId=#{conId}" )
     public int logoutConsumer(@Param("conId")int conId);
 
 //**************************************zhangbo********************************************************************************

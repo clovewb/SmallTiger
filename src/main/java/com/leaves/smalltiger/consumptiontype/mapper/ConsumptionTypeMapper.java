@@ -18,20 +18,20 @@ public interface ConsumptionTypeMapper extends BaseMapper<ConsumptionType> {
      * @param contName
      * @return
      */
-    @Select("SELECT * FROM CONSUMPTIONTYPE WHERE CONTNAME LIKE '%${contName}%'")
+    @Select("SELECT * FROM consumptiontype WHERE CONTNAME LIKE '%${contName}%'")
     public List<ConsumptionType> selectAllConsumptionType(@Param("contName")String contName);
 
     /**
      * 删除一条数据(改变状态为0)
      * @param contId
      */
-    @Select("UPDATE CONSUMPTIONTYPE SET CONTSTATUS = 0 WHERE CONTID = #{contId}")
+    @Select("UPDATE consumptiontype SET CONTSTATUS = 0 WHERE CONTID = #{contId}")
     public void updateContStatus(@Param("contId") int contId);
 
     /**
      * 修复一条数据(改变状态为1)
      * @param contId
      */
-    @Select("UPDATE CONSUMPTIONTYPE SET CONTSTATUS = 1 WHERE CONTID = #{contId}")
+    @Select("UPDATE consumptiontype SET CONTSTATUS = 1 WHERE CONTID = #{contId}")
     public void consumeContStatus(@Param("contId") int contId);
 }

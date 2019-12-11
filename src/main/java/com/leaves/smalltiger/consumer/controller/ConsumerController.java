@@ -57,8 +57,8 @@ public class ConsumerController {
     @RequestMapping(value = "/regConsumr",method = RequestMethod.POST)
     public MsgResult conReg(@RequestBody RegConsumer regConsumer){
         log.info("注册用户信息==="+regConsumer.toString());
-        MsgResult msgResult = consumerService.conReg(regConsumer);
-        return null;
+        MsgResult result = consumerService.conReg(regConsumer);
+        return result;
     }
 
     /**
