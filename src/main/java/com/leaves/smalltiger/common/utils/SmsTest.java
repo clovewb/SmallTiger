@@ -8,6 +8,10 @@ import java.util.Random;
 @Slf4j
 public class SmsTest {
 
+    public static void varify(){
+
+    }
+
    /* public static void main(String[] args) {
         String apiUrl = "https://sms_developer.zhenzikj.com";
         //榛子云系统上获取
