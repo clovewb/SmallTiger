@@ -180,6 +180,7 @@ public class ConsumerServiceImpl implements ConsumerService {
                     msgResult.setStatusCode(200);
                     msgResult.setMsg("手机号注册成功");
                     msgResult.setData(consumer2);
+                    log.info("注册成功");
                     return msgResult;
                 }
             }else {
@@ -187,6 +188,7 @@ public class ConsumerServiceImpl implements ConsumerService {
                 log.info("注册手机号查询的结果："+consumer1.toString());
                 msgResult.setStatusCode(201);
                 msgResult.setMsg("手机号已存在");
+                log.info("注册失败=====手机号已存在");
                 return msgResult;
             }
 
@@ -194,6 +196,7 @@ public class ConsumerServiceImpl implements ConsumerService {
         log.info("手机号格式不正确");
         msgResult.setStatusCode(201);
         msgResult.setMsg("请输入正确的手机号");
+        log.info("注册成功=====手机号格式不正确");
         return msgResult;
     }
 

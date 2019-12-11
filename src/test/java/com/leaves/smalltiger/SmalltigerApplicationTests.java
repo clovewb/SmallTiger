@@ -1,8 +1,10 @@
 package com.leaves.smalltiger;
 
 import com.leaves.smalltiger.common.po.Consumer;
+import com.leaves.smalltiger.common.po.Detail;
 import com.leaves.smalltiger.consumer.mapper.ConsumerMapper;
 import com.leaves.smalltiger.consumer.vo.RegConsumer;
+import com.leaves.smalltiger.detail.mapper.DetailMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +27,8 @@ public class SmalltigerApplicationTests {
     @Autowired
     private RedisTemplate redisTemplate;
     @Autowired
+    private DetailMapper detailMapper;
+    @Autowired
     private ConsumerMapper consumerMapper;
     @Test
     public void testConsumer() {
@@ -37,6 +41,15 @@ public class SmalltigerApplicationTests {
             log.info("手机号不存在" );
         }
 
+    }
+
+    @Test
+    public void testxx() {
+//        List<Consumer> consumers = consumerMapper.selectAll();
+        List<Detail> details = detailMapper.selectAll();
+        for (Detail detail : details){
+            log.info(detail.toString()+"***********");
+        }
     }
 
     @Test
