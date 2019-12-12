@@ -3,6 +3,7 @@ package com.leaves.smalltiger.community.controller;
 import com.leaves.smalltiger.common.utils.MsgResult;
 import com.leaves.smalltiger.community.service.CommunityService;
 import com.leaves.smalltiger.community.vo.CommunityInsert;
+import com.leaves.smalltiger.community.vo.PostingInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -97,17 +98,8 @@ public class CommunityController {
 
 //    ===========================================================================================
     @RequestMapping(value = "/uploads" , method = RequestMethod.POST)
-    public MsgResult uplod(){
-//        log.info("发帖内容。。。。。。。"+postings.toString());
-
-//        @Data
-//        @NoArgsConstructor
-//        @AllArgsConstructor
-//        @ToString
-//
-//            private String conId;
-//            private String msgWords;
-//            private List<MultipartFile> files;
+    public MsgResult uplod(@RequestBody PostingInfo postingInfo){
+      log.info("发帖内容。。。。。。。"+postingInfo.toString());
         MsgResult result = new MsgResult();
         result.setData(200);
         result.setMsg("发帖成功");
