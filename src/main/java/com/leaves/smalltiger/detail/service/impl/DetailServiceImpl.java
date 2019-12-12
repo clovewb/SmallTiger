@@ -409,7 +409,7 @@ public class DetailServiceImpl implements DetailService {
         }
         result.setStatusCode(200);
         result.setData(map);
-        result.setMsg("查询成功");
+        result.setMsg("查询成功啦");
         return result;
     }
 
