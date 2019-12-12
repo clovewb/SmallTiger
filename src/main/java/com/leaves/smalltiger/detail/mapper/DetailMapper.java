@@ -5,6 +5,7 @@ import com.leaves.smalltiger.common.po.Detail;
 import com.leaves.smalltiger.detail.vo.DataResult;
 import com.leaves.smalltiger.detail.vo.DetailHome;
 import com.leaves.smalltiger.detail.vo.DetailIndex;
+import com.leaves.smalltiger.detail.vo.DetailMingXi;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -111,4 +112,29 @@ public interface DetailMapper extends BaseMapper<Detail> {
                                       @Param("year") int year,
                                       @Param("month") int month
                                      );
+
+    /**
+     * 查询东西
+     * @return
+     */
+    @Select("SELECT c.conName , d.detId, d.conId , d.detSort ,d.contId,  " +
+            "d.detRemark , d.detAmount , detStatus , d.detTime   FROM  consumer c , detail d " +
+            "where c.conId = d.conId")
+    public List<DetailMingXi> queryAllDetails();
+
+    /**
+     * 明细页面====前台
+     * @param conId
+     * @param year
+     * @param month
+     * @param day
+     * @return
+     */
+    @Select("select d.*,cp.contIcon,cp.contName from detail d, consumptiontype cp where" +
+            " d.contId=cp.contId and year(detTime)=#{year} and month(detTime)=#{month} and day(detTime)=#{day}" +
+            " and d.conId=#{conId} ")
+    public List<DetailHome> queryAllHome(@Param("conId") int conId,
+                                         @Param("year") int year,
+                                         @Param("month") int month,
+                                         @Param("day")int day);
 }

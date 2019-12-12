@@ -2,6 +2,7 @@ package com.leaves.smalltiger.community.mapper;
 
 import com.leaves.smalltiger.common.config.BaseMapper;
 import com.leaves.smalltiger.common.po.Community;
+import com.leaves.smalltiger.community.vo.CommunityRsg;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -43,4 +44,12 @@ public interface CommunityMapper extends BaseMapper<Community> {
      */
     @Select("update community set msgStatus=0 where msgId=#{msgId}")
     public void resumeCommunityByMsgId(@Param("msgId")int msgId);
+    /**
+     * 查询留言
+     * @return
+     */
+    @Select("SELECT  con.conName, com.msgId , com.conId , com.msgWords , com.msgCTime , com.msgStatus , " +
+            "com.msgImage1 ,com.msgImage2 ,com.msgImage3 ,com.msgImage4 ,com.msgImage5 ,com.msgImage6 ,com.msgImage7 ,com.msgImage8 ,com.msgImage9, com.msgCTime " +
+            "FROM community com, consumer con where com.conId=con.conId")
+    public List<CommunityRsg> queryCom();
 }

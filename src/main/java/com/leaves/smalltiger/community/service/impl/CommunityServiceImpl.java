@@ -7,6 +7,7 @@ import com.leaves.smalltiger.common.utils.MsgResult;
 import com.leaves.smalltiger.community.mapper.CommunityMapper;
 import com.leaves.smalltiger.community.service.CommunityService;
 import com.leaves.smalltiger.community.vo.CommunityInsert;
+import com.leaves.smalltiger.community.vo.CommunityRsg;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.DateTimeLiteralExpression;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +71,7 @@ public class CommunityServiceImpl implements CommunityService {
      */
     @Override
     public MsgResult selectAllCommunity() {
-        List<Community> communities = communityMapper.selectAll();
+        List<CommunityRsg> communities = communityMapper.queryCom();
         log.info("CommunityServiceImpl --> selectAllCommunity"+communities.toString());
         return new MsgResult(200,"查询成功",communities);
     }

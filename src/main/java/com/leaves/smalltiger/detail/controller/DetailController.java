@@ -25,7 +25,7 @@ public class DetailController {
      * @return
      */
     @RequestMapping(value = "/detailPermonth", method = RequestMethod.GET)
-    public MsgResult selectByPerMonthSums(@RequestBody YearData yearMonthData){
+    public MsgResult selectByPerMonthSums(YearData yearMonthData){
         log.info("某年的账单：yearMonthData===="+yearMonthData.toString());
         MsgResult result = detailService.selectByPerMonthSums(yearMonthData.getDateYear(), yearMonthData.getConId());
         return result;
@@ -191,5 +191,17 @@ public class DetailController {
         log.info("前台传来的参数: 用户ID"+detailParam.getConId()+"  年份： "+detailParam.getYear()+"  月份："+detailParam.getMonth());
         MsgResult msgResult = detailService.queryHome(detailParam);
         return msgResult;
+    }
+
+    /**
+     * 前台=====明细页面
+     * @param detailParam
+     * @return
+     */
+    @RequestMapping(value = "/homes",method = RequestMethod.GET)
+    public MsgResult queryHomes(DetailParam detailParam){
+        log.info("前台首页明细页面："+detailParam.toString());
+        MsgResult result = detailService.queryAllHome(detailParam);
+        return result;
     }
 }

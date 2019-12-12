@@ -107,4 +107,6 @@ public interface DetailService {
     public MsgResult querydetails(DetailParam detailParam);
     //    查询明细页面当月的流水账
     public MsgResult queryHome(DetailParam detailParam);
+
+    public MsgResult queryAllHome(DetailParam detailParam);
 }

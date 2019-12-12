@@ -16,9 +16,7 @@ import javax.annotation.Resource;
 import java.text.DecimalFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -235,9 +233,9 @@ public class DetailServiceImpl implements DetailService {
     @Override
     public MsgResult selectAllDetail(int pageNum,int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<Detail> details = detailMapper.selectAll();
+        List<DetailMingXi> details = detailMapper.queryAllDetails();
         log.info("DetailServiceImpl --> selectAllDetail : "+details.toString());
-        PageInfo<Detail> detailPageInfo = new PageInfo<>(details);
+        PageInfo<DetailMingXi> detailPageInfo = new PageInfo<>(details);
         return new MsgResult(200,"查询完成",detailPageInfo);
     }
 
@@ -356,8 +354,19 @@ public class DetailServiceImpl implements DetailService {
 //        打印传来的参数值
         log.info("传来的年份是:"+detailParam.getYear()+" 月份:"+detailParam.getMonth()+" 用户ID是："+detailParam.getConId());
         MsgResult result = new MsgResult();
+        Map<Object,Object> map = new HashMap<>();
+        List<Object> times = new ArrayList<>();
+        times.add("2019-12-14");
+        times.add("2019-12-15");
+        times.add("2019-12-16");
 //        把查询到的数据放到list里
         List<DetailHome> detailHomes = detailMapper.queryHome( detailParam.getConId(), detailParam.getYear(), detailParam.getMonth());
+//        map.put("detailHomes",detailHomes);
+//        map.put("times",times);
+
+        for (DetailHome detailHome : detailHomes){
+            map.put(detailHome.getDetTime(),detailHome);
+        }
         for (DetailHome dataResult:detailHomes){
             log.info(dataResult+"打印查询结果");
         }
@@ -368,7 +377,7 @@ public class DetailServiceImpl implements DetailService {
 //            返回查询信息
             result.setMsg("查询成功");
 //            将结果封装到包装类里返回到前端
-            result.setData(detailHomes);
+            result.setData(map);
             return result;
         }
         result.setStatusCode(201);
@@ -377,6 +386,31 @@ public class DetailServiceImpl implements DetailService {
 //        log.info(detailParam.getConId()+""+ detailParam.getYear()+detailParam.getMonth());
 //        List<DetailHome> detailHomes = detailMapper.queryHome(detailParam.getConId(), detailParam.getYear(), detailParam.getMonth());
 //        return new MsgResult(200,"xxx",detailHomes);
+    }
+
+    /**
+     * 前台=====明细页面
+     * @param detailParam
+     * @return
+     */
+    @Override
+    public MsgResult queryAllHome(DetailParam detailParam) {
+        log.info("前台首页=====明细页面："+detailParam.toString());
+        MsgResult result = new MsgResult();
+        Map<Object,Object> map = new HashMap<>();
+        for (int i=31; i>0; i--){
+            List<DetailHome> detailHomes = detailMapper.queryAllHome(detailParam.getConId(), detailParam.getYear(), detailParam.getMonth(), i);
+            if (!detailHomes.isEmpty()){
+                map.put(detailParam.getYear()+"-"+detailParam.getMonth()+"-"+i,detailHomes);
+            }else {
+                continue;
+            }
+
+        }
+        result.setStatusCode(200);
+        result.setData(map);
+        result.setMsg("查询成功");
+        return result;
     }
 
 
