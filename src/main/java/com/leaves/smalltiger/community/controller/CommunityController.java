@@ -1,12 +1,18 @@
 package com.leaves.smalltiger.community.controller;
 
-import com.leaves.smalltiger.common.po.Community;
 import com.leaves.smalltiger.common.utils.MsgResult;
 import com.leaves.smalltiger.community.service.CommunityService;
 import com.leaves.smalltiger.community.vo.CommunityInsert;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * @author WUTONG
@@ -69,7 +75,7 @@ public class CommunityController {
     }
 
     /**
-     * 根据msgId删除留言,(实际为改变该条留言的状态为0)
+     * 根据msgId冯进留言,(实际为改变该条留言的状态为0)
      */
     @RequestMapping(value = "deleteCommunity",method = RequestMethod.PUT)
     public MsgResult deleteCommunityById(int[] msgIds){
@@ -79,12 +85,33 @@ public class CommunityController {
     }
 
     /**
-     * 根据msgId恢复留言
+     * 根据msgId通过留言
      */
     @RequestMapping(value = "resumeCommunity",method = RequestMethod.PUT)
     public MsgResult resumeCommodity(int[] msgIds){
         MsgResult msgResult = communityService.resumeCommunityByMsgId(msgIds);
         log.info("CommunityController --> insertCommodity:"+msgIds);
         return msgResult;
+    }
+
+
+//    ===========================================================================================
+    @RequestMapping(value = "/uploads" , method = RequestMethod.POST)
+    public MsgResult uplod(){
+//        log.info("发帖内容。。。。。。。"+postings.toString());
+
+//        @Data
+//        @NoArgsConstructor
+//        @AllArgsConstructor
+//        @ToString
+//
+//            private String conId;
+//            private String msgWords;
+//            private List<MultipartFile> files;
+        MsgResult result = new MsgResult();
+        result.setData(200);
+        result.setMsg("发帖成功");
+
+        return result;
     }
 }

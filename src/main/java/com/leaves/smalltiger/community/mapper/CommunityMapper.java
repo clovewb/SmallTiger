@@ -22,10 +22,10 @@ public interface CommunityMapper extends BaseMapper<Community> {
 
     //后台
     /**
-     * 根据msgId删除一条留言(实际为改变该留言状态)
+     * 根据msgId封禁一条留言(实际为改变该留言状态)
      * @param
      */
-    @Select("update community set msgStatus = 0 where msgId = #{msgId}")
+    @Select("update community set msgStatus = 2 where msgId = #{msgId}")
     public void deleteCommunityByMsgId (@Param("msgId")int msgId);
 
 
@@ -38,9 +38,9 @@ public interface CommunityMapper extends BaseMapper<Community> {
     public List<Community> selectCommodityByWords(@Param("msgWords")String msgWords);
 
     /**
-     * 恢复留言
+     * 通过留言
      * @param msgId
      */
-    @Select("update community set msgStatus=1 where msgId=#{msgId}")
+    @Select("update community set msgStatus=0 where msgId=#{msgId}")
     public void resumeCommunityByMsgId(@Param("msgId")int msgId);
 }

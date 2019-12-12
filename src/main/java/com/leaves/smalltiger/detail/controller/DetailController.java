@@ -20,7 +20,7 @@ public class DetailController {
     private DetailService detailService;
 
     /**
-     * 查询某人某年某月的数据
+     * 查询某人某年的数据
      * @param yearMonthData
      * @return
      */
