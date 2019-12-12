@@ -3,11 +3,6 @@ package com.leaves.smalltiger.community.controller;
 import com.leaves.smalltiger.common.utils.MsgResult;
 import com.leaves.smalltiger.community.service.CommunityService;
 import com.leaves.smalltiger.community.vo.CommunityInsert;
-import com.leaves.smalltiger.community.vo.PostingInfo;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -97,7 +92,7 @@ public class CommunityController {
 
 
 //    ===========================================================================================
-    @RequestMapping(value = "/uploads" , method = RequestMethod.POST)
+    /*@RequestMapping(value = "/uploads" , method = RequestMethod.POST)
     public MsgResult uplod(@RequestBody PostingInfo postingInfo){
       log.info("发帖内容。。。。。。。"+postingInfo.toString());
         MsgResult result = new MsgResult();
@@ -105,5 +100,5 @@ public class CommunityController {
         result.setMsg("发帖成功");
 
         return result;
-    }
+    }*/
 }
