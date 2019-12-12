@@ -25,7 +25,7 @@ public class DetailController {
      * @return
      */
     @RequestMapping(value = "/detailPermonth", method = RequestMethod.GET)
-    public MsgResult selectByPerMonthSums(@RequestBody YearMonthData yearMonthData){
+    public MsgResult selectByPerMonthSums(@RequestBody YearData yearMonthData){
         log.info("某年的账单：yearMonthData===="+yearMonthData.toString());
         MsgResult result = detailService.selectByPerMonthSums(yearMonthData.getDateYear(), yearMonthData.getConId());
         return result;

@@ -17,7 +17,7 @@ public interface CommunityMapper extends BaseMapper<Community> {
      * @param
      * @return
      */
-    @Select("SELECT * FROM community WHERE msgStatus = 1 order by msgCTime desc")
+    @Select("SELECT * FROM community WHERE msgStatus = 2 order by msgCTime desc")
     public List<Community> selectCommunitiesByMsgStatus();
 
     //后台

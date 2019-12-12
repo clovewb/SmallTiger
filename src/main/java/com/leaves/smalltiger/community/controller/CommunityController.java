@@ -3,11 +3,13 @@ package com.leaves.smalltiger.community.controller;
 import com.leaves.smalltiger.common.utils.MsgResult;
 import com.leaves.smalltiger.community.service.CommunityService;
 import com.leaves.smalltiger.community.vo.CommunityInsert;
+import com.leaves.smalltiger.community.vo.FormData;
 import com.leaves.smalltiger.community.vo.Postings;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import sun.text.resources.FormatData;
 
 import java.util.List;
 
@@ -94,8 +96,9 @@ public class CommunityController {
 
 //    ===========================================================================================
     @RequestMapping(value = "/uploads" , method = RequestMethod.POST)
-    public MsgResult uplod(@RequestBody Postings postings){
-      log.info("发帖内容。。。。。。。。。。"+postings.toString());
+    public MsgResult uplod(@RequestParam FormData file){
+
+      log.info("发帖t图片。。。。。。。。。。"+file);
         MsgResult result = new MsgResult();
         result.setData(200);
         result.setMsg("发帖成功");
