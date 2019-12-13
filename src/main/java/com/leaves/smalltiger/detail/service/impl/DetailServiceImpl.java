@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
@@ -80,10 +81,13 @@ public class DetailServiceImpl implements DetailService {
     public MsgResult selectByMonthSums(int dateYear, int dateMonth, int conId) {
         log.info("IncomeServiceImpl中selectByPerMonthSums方法：查询detail中" + conId + "===" + dateYear + "年" + dateMonth + "月的收支数据");
         MsgResult msgResult = new MsgResult();
+//            保留两位小数
+        DecimalFormat df = new DecimalFormat(".00");
 //       查询的结果
         DataResult dataResult = detailMapper.selectByMonthSums(dateYear, dateMonth, conId);
 //        判断查询的结果是否为空
         if (dataResult != null) {//数据不为空时
+            log.info("======dataResult不为空=====");
             dataResult.setModernYear(dateYear);
             if (dataResult.getMonthTotalExpenditure() == null) {
                 dataResult.setMonthTotalExpenditure(0.0);
@@ -91,12 +95,22 @@ public class DetailServiceImpl implements DetailService {
             if (dataResult.getMonthTotalIncome() == null) {
                 dataResult.setMonthTotalIncome(0.0);
             }
-//            保留两位小数
-            DecimalFormat df = new DecimalFormat(".00");
-//            将计算的结果（String类型）转为double类型的
-            double difference = Double.parseDouble(df.format(dataResult.getMonthTotalExpenditure() - dataResult.getMonthTotalIncome()));
-            dataResult.setMonthSurplus(difference);
-            log.info("用户" + conId + "在" + dateYear + "年" + dateMonth + "月的收入、支出、结余数据为：" + dataResult.toString());
+//            支出转换
+            double totalExpenditure = Double.parseDouble(df.format(dataResult.getMonthTotalExpenditure()));
+            dataResult.setMonthTotalExpenditure(totalExpenditure);
+//            收入转换
+            double totalIncome = Double.parseDouble(df.format(dataResult.getMonthTotalIncome()));
+            dataResult.setMonthTotalIncome(totalIncome);
+////            将计算的结果（String类型）转为double类型的
+//            double difference = Double.parseDouble(df.format(dataResult.getMonthTotalExpenditure() - dataResult.getMonthTotalIncome()));
+            double difference = totalExpenditure-totalIncome;
+//            DecimalFormat dfs = new  DecimalFormat("#.00");
+//            String format = dfs.format(difference);
+            BigDecimal bd = new BigDecimal(difference);
+            Double surplus = bd.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+
+            dataResult.setMonthSurplus(surplus);
+            log.info("用户" + conId + "单单在" + dateYear + "年" + dateMonth + "月的收入、支出、结余数据为：" + dataResult.toString());
 //         将结果封装到返回类里面
             msgResult.setStatusCode(200);
             msgResult.setData(dataResult);
@@ -388,30 +402,49 @@ public class DetailServiceImpl implements DetailService {
 //        return new MsgResult(200,"xxx",detailHomes);
     }
 
-    /**
-     * 前台=====明细页面
-     * @param detailParam
-     * @return
-     */
     @Override
     public MsgResult queryAllHome(DetailParam detailParam) {
-        log.info("前台首页=====明细页面："+detailParam.toString());
         MsgResult result = new MsgResult();
-        Map<Object,Object> map = new HashMap<>();
+        List<DataTime> dataTimes = new ArrayList<>();
+//        List<DetailHome> detailHomes = detailMapper.queryAllHome(detailParam.getConId(), detailParam.getYear(), detailParam.getMonth());
+//        if (!detailHomes.isEmpty()){
+//            for (DetailHome dataTime : detailHomes){
+//                dataTimes.add(new DataTime(dataTime.getDetTime(),dataTime));
+//                log.info("====="+new DataTime(dataTime.getDetTime(),dataTime).toString());
+//            }
+//            result.setStatusCode(200);
+//            result.setData(dataTimes);
+//            result.setMsg("查询成功");
+//            return result;
+//        }
+        int year = detailParam.getYear();
+        int month = detailParam.getMonth();
         for (int i=31; i>0; i--){
-            List<DetailHome> detailHomes = detailMapper.queryAllHome(detailParam.getConId(), detailParam.getYear(), detailParam.getMonth(), i);
+            List<DetailHome> detailHomes = detailMapper.queryAllHomes(detailParam.getConId(), year, month, i);
+            for (DetailHome detailHome : detailHomes){
+                log.info("*=*=/=/=/"+detailHome.toString());
+            }
             if (!detailHomes.isEmpty()){
-                map.put(detailParam.getYear()+"-"+detailParam.getMonth()+"-"+i,detailHomes);
+                log.info("==queryAllHome==if=="+i);
+                dataTimes.add(new DataTime(year+"年"+month+"月"+i+"日",detailHomes));
+//                log.info("======"+new DataTime(year+"年"+month+"月"+i+"日",detailHomes).toString());
+                log.info("======"+i);
             }else {
+                log.info("=queryAllHome==else==="+i);
                 continue;
             }
-
         }
         result.setStatusCode(200);
-        result.setData(map);
-        result.setMsg("查询成功啦");
+        result.setData(dataTimes);
+        result.setMsg("查询成功");
         return result;
+
+//        result.setStatusCode(201);
+//        result.setMsg("查询失败");
+//        return result;
+
     }
+
 
 
 }

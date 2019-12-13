@@ -81,9 +81,21 @@ public interface ConsumerMapper extends BaseMapper<Consumer> {
     @Update("UPDATE consumer SET conStatus= 2 WHERE conId=#{conId}" )
     public int logoutConsumer(@Param("conId")int conId);
 
+    /**
+     * 根据手机号查询状态为5的=====后台登录
+     * @param conTel
+     * @return
+     */
+    @Select("SELECT * FROM consumer WHERE conTel=#{conTel} AND conStatus= 5")
+    public Consumer selectByphones(@Param("conTel")String conTel);
+
+    @Update("update consumer set conBudget = #{conBudget} where conId = #{conId}")
+    public int updateBudget(@Param("conId")int conId, @Param("conBudget")double conBudget);
+
+
 //**************************************zhangbo********************************************************************************
     /**
-     * 根据手机号查询
+     * 根据手机号查询状态为1的=====前台登录
      * @param conTM
      * @return
      */

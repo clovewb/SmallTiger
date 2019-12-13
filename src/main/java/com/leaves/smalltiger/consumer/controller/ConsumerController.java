@@ -165,13 +165,24 @@ public class ConsumerController {
         return result;
     }
 
+
+    /**
+     * 后台登录
+     */
+    @RequestMapping(value = "/logins",method = RequestMethod.POST)
+    public MsgResult dealLogins(@RequestBody ConsumerInfo consumerInfo){
+        MsgResult msgResult = consumerService.loginBackstage(consumerInfo);
+        return msgResult;
+    }
+
+
 //=============================================ZHANGBO================================================================================================
 
     /**
      * 登录
      */
     @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public MsgResult dealLogin(@RequestBody ConsumerInfo consumerInfo){
+    public MsgResult dealLogin(ConsumerInfo consumerInfo){
         MsgResult msgResult = consumerService.login(consumerInfo);
         return msgResult;
     }

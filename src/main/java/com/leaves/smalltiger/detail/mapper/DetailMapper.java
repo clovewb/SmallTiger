@@ -137,4 +137,20 @@ public interface DetailMapper extends BaseMapper<Detail> {
                                          @Param("year") int year,
                                          @Param("month") int month,
                                          @Param("day")int day);
+
+    /**
+     * 前台页面具体数据
+     * @param conId
+     * @param year
+     * @param month
+     * @param day
+     * @return
+     */
+    @Select("select d.*,cp.contIcon,cp.contName from detail d, consumptiontype cp where" +
+            " d.contId=cp.contId and year(detTime)=#{year} and month(detTime)=#{month} " +
+            " and day(detTime)=#{day} and d.conId=#{conId} ")
+    public List<DetailHome> queryAllHomes(@Param("conId") int conId,
+                                          @Param("year") int year,
+                                          @Param("month") int month,
+                                          @Param("day") int day);
 }

@@ -77,10 +77,17 @@ public interface ConsumerService {
      */
     public MsgResult logoutConsumer(int conId);
 
+    /**
+     * 用户登录=====后台
+     * @param phoneConsumerInfo
+     * @return
+     */
+    public MsgResult loginBackstage(ConsumerInfo phoneConsumerInfo);
+
 //===============================================ZAHANGBO==============================================================================================
 
     /**
-     * 用户登录
+     * 用户登录=====前台
      * @param phoneConsumerInfo
      * @return
      */

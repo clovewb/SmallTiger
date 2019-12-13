@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -65,17 +66,27 @@ public class RecordingServiceImpl implements RecordingService {
         if (monthTotalIncome == null){
             monthTotalIncome = 0.0;
         }
-        log.info("收入"+monthTotalIncome);
+//        保留两位小数
+        BigDecimal ti = new BigDecimal(monthTotalIncome);
+        Double monthTotalIncomeSum = ti.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        log.info(conId+"在"+year+"年"+month+"月的收入"+monthTotalIncomeSum);
+
         //当月总支出
         Double monthTotalExpenditure = recordingMapper.selectExpendByConIdCurrentDate(conId, year, month);
         if (monthTotalExpenditure == null){
-            monthTotalIncome = 0.0;
+            monthTotalExpenditure = 0.0;
         }
-        log.info("支出"+monthTotalExpenditure);
+        BigDecimal te = new BigDecimal(monthTotalExpenditure);
+        Double monthTotalExpenditureSum = te.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        log.info(conId+"在"+year+"年"+month+"月的支出"+monthTotalExpenditureSum);
         //当月结余
         Double monthSurplus = monthTotalIncome - monthTotalExpenditure;
-        log.info("结余"+monthSurplus);
-        DataResult dataResult = new DataResult(year,month,monthTotalExpenditure,monthTotalIncome,monthSurplus);
+        BigDecimal sm = new BigDecimal(monthSurplus);
+        Double monthSurplu = sm.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        log.info(conId+"在"+year+"年"+month+"月的结余"+monthSurplu);
+
+        DataResult dataResult = new DataResult(year,month,monthTotalIncomeSum,monthTotalExpenditureSum,monthSurplu);
+        log.info(dataResult.toString()+"======***===");
         return new MsgResult(200,"查询成功",dataResult);
     }
 

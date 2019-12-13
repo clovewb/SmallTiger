@@ -49,7 +49,8 @@ public interface CommunityMapper extends BaseMapper<Community> {
      * @return
      */
     @Select("SELECT  con.conName, com.msgId , com.conId , com.msgWords , com.msgCTime , com.msgStatus , " +
-            "com.msgImage1 ,com.msgImage2 ,com.msgImage3 ,com.msgImage4 ,com.msgImage5 ,com.msgImage6 ,com.msgImage7 ,com.msgImage8 ,com.msgImage9, com.msgCTime " +
+            "com.msgImage1 ,com.msgImage2 ,com.msgImage3 ,com.msgImage4 ,com.msgImage5 ,com.msgImage6 ," +
+            "com.msgImage7 ,com.msgImage8 ,com.msgImage9, com.msgCTime " +
             "FROM community com, consumer con where com.conId=con.conId")
     public List<CommunityRsg> queryCom();
 }

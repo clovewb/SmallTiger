@@ -1,5 +1,7 @@
 package com.leaves.smalltiger.consumer.service.impl;
+import	java.lang.ref.Reference;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -11,10 +13,12 @@ import com.leaves.smalltiger.common.utils.*;
 import com.leaves.smalltiger.consumer.mapper.ConsumerMapper;
 import com.leaves.smalltiger.consumer.service.ConsumerService;
 import com.leaves.smalltiger.consumer.vo.*;
+import com.leaves.smalltiger.recording.mapper.RecordingMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import sun.rmi.server.LoaderHandler;
 
 import javax.annotation.Resource;
 
@@ -23,6 +27,8 @@ import javax.annotation.Resource;
 public class ConsumerServiceImpl implements ConsumerService {
     @Resource
     private ConsumerMapper consumerMapper;
+    @Resource
+    private RecordingMapper recordingMapper;
 
 //=============================================================================================================================================
 //==================================================前端前台接口===========================================================================================
@@ -351,27 +357,29 @@ public class ConsumerServiceImpl implements ConsumerService {
         return result;
     }
 
-//=============================================================================================================================================
-
     /**
-     * 用户登录
+     * 用户登录====前台
+     * @param consumerInfo
+     * @return
      */
     @Override
-    public MsgResult login(ConsumerInfo consumerInfo) {
+    public MsgResult loginBackstage(ConsumerInfo consumerInfo) {
         String conTM = consumerInfo.getConTel();
         String password = consumerInfo.getPassword();
         log.info("登录账号："+conTM);
         log.info("登录密码："+password);
         //进行判断手机号或邮箱
         if (RegularExpression.orPhone(conTM)) {//是不是手机号
-            Consumer consumer = consumerMapper.selectOneByTS(conTM);
-            if (consumer != null) {
+            Consumer consumer = consumerMapper.selectByphones(conTM);
+            if (consumer !=null) {
+                log.info("===============");
                 if (consumer.getPassword().equals(password)) {
                     return new MsgResult(200, "登录成功", consumer);
                 }else {
                     return new MsgResult(201, "用户名或密码错误", null);
                 }
             } else {
+                log.info("***************=========");
                 return new MsgResult(201, "该账号不存在，请注册", null);
             }
         }
@@ -387,6 +395,50 @@ public class ConsumerServiceImpl implements ConsumerService {
                 return new MsgResult(201, "该账号不存在，请注册", null);
             }
         }
+        log.info("------------*******------------*******");
+        return new MsgResult(201, "账号格式错误", null);
+    }
+
+
+    //=============================================================================================================================================
+
+    /**
+     * 用户登录====前台
+     */
+    @Override
+    public MsgResult login(ConsumerInfo consumerInfo) {
+        String conTM = consumerInfo.getConTel();
+        String password = consumerInfo.getPassword();
+        log.info("登录账号："+conTM);
+        log.info("登录密码："+password);
+        //进行判断手机号或邮箱
+        if (RegularExpression.orPhone(conTM)) {//是不是手机号
+            Consumer consumer = consumerMapper.selectOneByTS(conTM);
+            if (consumer !=null) {
+                log.info("===============");
+                if (consumer.getPassword().equals(password)) {
+                    return new MsgResult(200, "登录成功", consumer);
+                }else {
+                    return new MsgResult(201, "用户名或密码错误", null);
+                }
+            } else {
+                log.info("***************=========");
+                return new MsgResult(201, "该账号不存在，请注册", null);
+            }
+        }
+        if (RegularExpression.orEmail(conTM)) {//是不是邮箱号
+            Consumer consumer = consumerMapper.selectOneByMS(conTM);
+            if (consumer != null) {
+                if (consumer.getPassword().equals(password)) {
+                    return new MsgResult(200, "登录成功", consumer);
+                }else {
+                    return new MsgResult(201, "用户名或密码错误", null);
+                }
+            } else {
+                return new MsgResult(201, "该账号不存在，请注册", null);
+            }
+        }
+        log.info("------------*******------------*******");
         return new MsgResult(201, "账号格式错误", null);
     }
 
@@ -417,14 +469,35 @@ public class ConsumerServiceImpl implements ConsumerService {
     @Override
     public MsgResult updateBudget(BudgetInfo budgetInfo) {
         Double conBudget = budgetInfo.getConBudget();
-        Consumer consumer = new Consumer();
+        CurrentBudget currentBudget = new CurrentBudget();
+        //获取当前年月日
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH)+1;
+
         Consumer consumer1 = consumerMapper.selectByPrimaryKey(budgetInfo.getConId());
         if (consumer1 != null){
-            consumer.setConId(budgetInfo.getConId());
-            consumer.setConBudget(budgetInfo.getConBudget());
-            int i = consumerMapper.updateByPrimaryKey(consumer);
+
+            int i = consumerMapper.updateBudget(budgetInfo.getConId(),conBudget);
             if (i>0){
-                return new MsgResult(200,"设置预算成功",conBudget);
+//                修改后的预算
+                Consumer consumer2 = consumerMapper.selectByPrimaryKey(budgetInfo.getConId());
+                //当月总支出
+                Double monthTotalExpenditure = recordingMapper.selectExpendByConIdCurrentDate(budgetInfo.getConId(), year, month);
+                if (monthTotalExpenditure == null){
+                    monthTotalExpenditure = 0.0;
+                }
+                BigDecimal te = new BigDecimal(monthTotalExpenditure);
+                Double monthTotalExpenditureSum = te.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                log.info(budgetInfo.getConId()+"在"+year+"年"+month+"月的支出"+monthTotalExpenditureSum);
+//               预算剩余
+                Double currentSurplus = consumer2.getConBudget() - monthTotalExpenditureSum;
+                BigDecimal sy = new BigDecimal(currentSurplus);
+                Double currentSurplu = sy.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                currentBudget.setCurrentBudget(currentSurplu);
+                currentBudget.setCurrentExpenditure(monthTotalExpenditureSum);
+                currentBudget.setCurrentSurplus(currentSurplu);
+                return new MsgResult(200,"设置预算成功",currentBudget);
             }else {
                 return new MsgResult(201,"设置预算失败",null);
             }
