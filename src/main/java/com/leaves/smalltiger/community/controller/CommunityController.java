@@ -95,10 +95,21 @@ public class CommunityController {
 
 
 //    ===========================================================================================
+//    @RequestMapping(value = "/uploads" , method = RequestMethod.POST)
+//    public MsgResult uplod(@RequestParam FormData file){
+//
+//      log.info("发帖t图片。。。。。。。。。。"+file);
+//        MsgResult result = new MsgResult();
+//        result.setData(200);
+//        result.setMsg("发帖成功");
+//        return result;
+//    }
     @RequestMapping(value = "/uploads" , method = RequestMethod.POST)
-    public MsgResult uplod(@RequestParam FormData file){
-
-      log.info("发帖t图片。。。。。。。。。。"+file);
+    public MsgResult uplod(@RequestParam("msgImage1")MultipartFile files){
+//        for (MultipartFile file : files) {
+//            log.info("发帖t图片。。。。。。。。。。" + file);
+//        }
+        log.info("发帖t图片。。。。。。。。。。" + files);
         MsgResult result = new MsgResult();
         result.setData(200);
         result.setMsg("发帖成功");

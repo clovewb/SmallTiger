@@ -9,6 +9,7 @@ import com.leaves.smalltiger.detail.vo.DetailMingXi;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -72,7 +73,7 @@ public interface DetailMapper extends BaseMapper<Detail> {
     /**
      * 根据detId恢复一条明细
      */
-    @Select("update detail set detStatus = 1 where detId = #{detId}")
+    @Update("update detail set detStatus = 1 where detId = #{detId}")
     public void resumeDetailById (@Param("detId")int detId);
 
     /**

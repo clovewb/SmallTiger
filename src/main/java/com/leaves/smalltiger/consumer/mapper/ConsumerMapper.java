@@ -89,8 +89,17 @@ public interface ConsumerMapper extends BaseMapper<Consumer> {
     @Select("SELECT * FROM consumer WHERE conTel=#{conTel} AND conStatus= 5")
     public Consumer selectByphones(@Param("conTel")String conTel);
 
+    /**
+     * 设置用户预算
+     */
     @Update("update consumer set conBudget = #{conBudget} where conId = #{conId}")
     public int updateBudget(@Param("conId")int conId, @Param("conBudget")double conBudget);
+
+    /**
+     * 清除用户预算
+     */
+    @Update("update consumer set conBudget = NULL where conId = #{conId}")
+    public int deleteBudget(@Param("conId")int conId);
 
 
 //**************************************zhangbo********************************************************************************

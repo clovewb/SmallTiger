@@ -2,9 +2,13 @@ package com.leaves.smalltiger;
 
 import com.leaves.smalltiger.common.po.Consumer;
 import com.leaves.smalltiger.common.po.Detail;
+import com.leaves.smalltiger.common.utils.MsgResult;
 import com.leaves.smalltiger.consumer.mapper.ConsumerMapper;
 import com.leaves.smalltiger.consumer.vo.RegConsumer;
 import com.leaves.smalltiger.detail.mapper.DetailMapper;
+import com.leaves.smalltiger.detail.service.DetailService;
+import com.leaves.smalltiger.detail.vo.DetailInsert;
+import com.leaves.smalltiger.detail.vo.DetailParam;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -71,5 +75,20 @@ public class SmalltigerApplicationTests {
         consumers.add(consumer2);
         consumers.add(consumer3);
         redisTemplate.opsForValue().set("cons",consumers);
+    }
+    @Autowired
+    private DetailService detailService;
+
+    @Test
+    public void LS(){
+        DetailInsert detailInsert = new DetailInsert(520131417,1,1,35.9,"小五","2019-12-14");
+        MsgResult result = detailService.insertDetail(detailInsert);
+        log.info("==="+result.toString());
+    }
+
+    @Test
+    public void setDetailServ(){
+        MsgResult result = detailService.queryAllHome(new DetailParam(520131417, 2019, 12));
+        log.info(result.toString()+"=======");
     }
 }

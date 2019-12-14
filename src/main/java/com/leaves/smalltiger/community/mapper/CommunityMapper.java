@@ -14,11 +14,11 @@ import java.util.List;
 @Repository
 public interface CommunityMapper extends BaseMapper<Community> {
     /**
-     * 查询所有状态为1的评论
+     * 查询所有状态为0的评论
      * @param
      * @return
      */
-    @Select("SELECT * FROM community WHERE msgStatus = 2 order by msgCTime desc")
+    @Select("SELECT * FROM community WHERE msgStatus = 0 order by msgCTime desc")
     public List<Community> selectCommunitiesByMsgStatus();
 
     //后台

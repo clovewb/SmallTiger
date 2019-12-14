@@ -33,4 +33,5 @@ detStatus*/
     private Date detTime;//记账准确时间
     private String contName;//记账对应类型
     private int conId;//用户id
+
 }

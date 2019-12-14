@@ -543,24 +543,45 @@ public class ConsumerServiceImpl implements ConsumerService {
      */
     @Override
     public MsgResult autoClear(int conId) {
+        CurrentBudget currentBudget = new CurrentBudget();
         //获取当前年月日
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DATE);
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH)+1;
         Consumer consumer = new Consumer();
         Consumer consumer1 = consumerMapper.selectByPrimaryKey(conId);
         Double conBudget = consumer1.getConBudget();
+        //======================================================================================
+        //当月总支出
+        Double monthTotalExpenditure = recordingMapper.selectExpendByConIdCurrentDate(conId, year, month);
+        if (monthTotalExpenditure == null){
+            monthTotalExpenditure = 0.0;
+        }
+        BigDecimal te = new BigDecimal(monthTotalExpenditure);
+        Double monthTotalExpenditureSum = te.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        log.info(conId+"在"+year+"年"+month+"月的支出"+monthTotalExpenditureSum);
+        currentBudget.setCurrentBudget(conBudget);
+        currentBudget.setCurrentExpenditure(monthTotalExpenditureSum);
+        //预算剩余
+        Double currentSurplus = conBudget - monthTotalExpenditureSum;
+        BigDecimal sy = new BigDecimal(currentSurplus);
+        Double currentSurplu = sy.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        currentBudget.setCurrentSurplus(currentSurplu);
+        //=========================================================================================
         if (day == 1) {
             consumer.setConId(conId);
             consumer.setConBudget(null);
-            int i = consumerMapper.updateByPrimaryKey(consumer);
+            int i = consumerMapper.deleteBudget(conId);
             if (i>0){
-                return new MsgResult(200, "清除预算成功", null);
+                return new MsgResult(200, "月初清除预算成功", new CurrentBudget(0.0,0.0,0.0));
             }else {
-                return new MsgResult(201, "清除预算失败", conBudget);
+                return new MsgResult(201, "月初清除预算失败", currentBudget);
             }
         }
-        return new MsgResult(201, "不是月初，不进行清除预算", conBudget);
+        return new MsgResult(201, "不是月初，不进行清除预算", currentBudget);
     }
+
 
     /**
      * 返回MsgResult状态的方法
