@@ -182,7 +182,7 @@ public class ConsumerController {
      * 登录
      */
     @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public MsgResult dealLogin(ConsumerInfo consumerInfo){
+    public MsgResult dealLogin(@RequestBody ConsumerInfo consumerInfo){
         MsgResult msgResult = consumerService.login(consumerInfo);
         return msgResult;
     }
