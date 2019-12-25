@@ -2,6 +2,7 @@ package com.leaves.smalltiger.community.service;
 
 import com.leaves.smalltiger.common.utils.MsgResult;
 import com.leaves.smalltiger.community.vo.CommunityInsert;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface CommunityService {
 

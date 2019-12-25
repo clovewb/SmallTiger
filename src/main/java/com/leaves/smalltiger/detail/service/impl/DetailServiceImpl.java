@@ -134,6 +134,7 @@ public class DetailServiceImpl implements DetailService {
     @Override
     public MsgResult insertDetail(DetailInsert detailInsert) {
         Detail detail = new Detail();
+        log.info("新增记账"+detailInsert.toString());
         detail.setConId(detailInsert.getConId());
         detail.setDetSort(detailInsert.getDetSort());
         detail.setContId(detailInsert.getContId());
@@ -147,7 +148,7 @@ public class DetailServiceImpl implements DetailService {
         Date parse = simpleDateFormat.parse(detailInsert.getDetTime(), parsePosition);
         detail.setDetTime(parse);
         detail.setDetStatus(1);
-        log.info("DetailServiceImpl --> insertDetail:  "+detail.toString());
+        log.info("记账：DetailServiceImpl --> insertDetail:  "+detail.toString());
         int i = detailMapper.insertSelective(detail);
         if (i>0){
             return new MsgResult(200,"新增成功",detail);

@@ -1,8 +1,11 @@
 package com.leaves.smalltiger.community.controller;
 
+import com.leaves.smalltiger.common.po.Consumer;
 import com.leaves.smalltiger.common.utils.MsgResult;
+import com.leaves.smalltiger.common.utils.QiniuCloudUtil;
 import com.leaves.smalltiger.community.service.CommunityService;
 import com.leaves.smalltiger.community.vo.CommunityInsert;
+import com.leaves.smalltiger.community.vo.FinalName;
 import com.leaves.smalltiger.community.vo.FormData;
 import com.leaves.smalltiger.community.vo.Postings;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import sun.text.resources.FormatData;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -48,6 +52,26 @@ public class CommunityController {
         log.info("CommunityController --> insertCommodity:"+communityInsert.toString());
         return msgResult;
     }
+//图片
+    @RequestMapping(value = "upload",method = RequestMethod.POST)
+    public void insertCommodity(@RequestParam("file") MultipartFile file){
+        FinalName finalName = new FinalName();
+
+        QiniuCloudUtil qiniuCloudUtil = new QiniuCloudUtil();
+        log.info("IMPL文件："+file.getOriginalFilename());
+        if(file.isEmpty()) {
+            log.info("文件为空...........");
+        }
+        try {
+            finalName.setImgurl(qiniuCloudUtil.saveImage(file));
+            log.info("文件上传成功："+finalName.getImgurl());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            log.info("===异常");
+        }
+    }
+
 //后台使用
 
     /**
